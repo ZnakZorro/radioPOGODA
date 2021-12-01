@@ -1,0 +1,207 @@
+{
+	"lightsleetandthunder": {
+		"en": "Light sleet and thunder",
+		"tr": "Lekki deszcz ze śniegiem i grzmoty",
+		"pl": "Lekki deszcz ze śniegiem i grzmoty"
+	},
+	"heavysleetandthunder": {
+		"en": "Heavy sleet and thunder",
+		"tr": "Silny deszcz ze śniegiem i grzmoty",
+		"pl": "Silny deszcz ze śniegiem i grzmoty"
+	},
+	"rainandthunder": {
+		"en": "Rain and thunder",
+		"tr": "Deszcz i grzmoty",
+		"pl": "Deszcz i grzmoty"
+	},
+	"lightssnowshowersandthunder": {
+		"en": "Light snow showers and thunder",
+		"tr": "Lekkie opady śniegu i grzmoty",
+		"pl": "Lekkie opady śniegu i grzmoty"
+	},
+	"heavysleetshowersandthunder": {
+		"en": "Heavy sleet showers and thunder",
+		"tr": "Ulewne deszcze ze śniegiem i grzmoty",
+		"pl": "Ulewne deszcze ze śniegiem i grzmoty"
+	},
+	"lightrainshowers": {
+		"en": "Light rain showers",
+		"tr": "Lekkie przelotne deszcze",
+		"pl": "Lekkie przelotne deszcze"
+	},
+	"lightsleetshowers": {
+		"en": "Light sleet showers",
+		"tr": "Lekkie przelotne deszcze ze śniegiem",
+		"pl": "Lekkie przelotne deszcze ze śniegiem"
+	},
+	"heavysnowandthunder": {
+		"en": "Heavy snow and thunder",
+		"tr": "Ciężki śnieg i grzmoty",
+		"pl": "Ciężki śnieg i grzmoty"
+	},
+	"sleet": {
+		"en": "Sleet",
+		"tr": "Śnieg z deszczem",
+		"pl": "Slota"
+	},
+	"cloudy": {
+		"en": "Cloudy",
+		"tr": "Pochmurny",
+		"pl": "Pochmurny"
+	},
+	"lightsnow": {
+		"en": "Light snow",
+		"tr": "Lekkie opady śniegu",
+		"pl": "Lekkie opady śniegu"
+	},
+	"fog": {
+		"en": "Fog",
+		"tr": "Mgła",
+		"pl": "Mgla"
+	},
+	"snowshowers": {
+		"en": "Snow showers",
+		"tr": "Opady śniegu",
+		"pl": "Snieg"
+	},
+	"lightssleetshowersandthunder": {
+		"en": "Light sleet showers and thunder",
+		"tr": "Lekkie przelotne deszcze ze śniegiem i grzmoty",
+		"pl": "Lekkie przelotne deszcze ze śniegiem i grzmoty"
+	},
+	"lightrain": {
+		"en": "Light rain",
+		"tr": "Lekki deszcz",
+		"pl": "Deszczyk"
+	},
+	"snowshowersandthunder": {
+		"en": "Snow showers and thunder",
+		"tr": "Śnieg i grzmoty",
+		"pl": "Śnieg i grzmoty"
+	},
+	"sleetshowers": {
+		"en": "Sleet showers",
+		"tr": "Prysznice ze śniegiem",
+		"pl": "Prysznice ze śniegiem"
+	},
+	"heavyrainshowers": {
+		"en": "Heavy rain showers",
+		"tr": "Ulewne deszcze",
+		"pl": "Ulewne deszcze"
+	},
+	"heavysnowshowersandthunder": {
+		"en": "Heavy snow showers and thunder",
+		"tr": "Obfite opady śniegu i grzmoty",
+		"pl": "Obfite opady śniegu i grzmoty"
+	},
+	"lightrainshowersandthunder": {
+		"en": "Light rain showers and thunder",
+		"tr": "Lekkie przelotne deszcze i grzmoty",
+		"pl": "Lekkie przelotne deszcze i grzmoty"
+	},
+	"lightsleet": {
+		"en": "Light sleet",
+		"tr": "Lekki deszcz ze śniegiem",
+		"pl": "Chlapa"
+	},
+	"snow": {
+		"en": "Snow",
+		"tr": "Śnieg",
+		"pl": "Snieg"
+	},
+	"rain": {
+		"en": "Rain",
+		"tr": "Deszcz",
+		"pl": "Deszcz"
+	},
+	"heavyrainandthunder": {
+		"en": "Heavy rain and thunder",
+		"tr": "Ulewny deszcz i grzmoty",
+		"pl": "Ulewny deszcz i grzmoty"
+	},
+	"heavysleetshowers": {
+		"en": "Heavy sleet showers",
+		"tr": "Przelotne opady deszczu ze śniegiem",
+		"pl": "Przelotne opady deszczu ze śniegiem"
+	},
+	"clearsky": {
+		"en": "Clear sky",
+		"tr": "Czyste Niebo",
+		"pl": "Czyste Niebo"
+	},
+	"heavyrain": {
+		"en": "Heavy rain",
+		"tr": "Ulewa",
+		"pl": "Ulewa"
+	},
+	"rainshowers": {
+		"en": "Rain showers",
+		"tr": "Prysznice deszczowe",
+		"pl": "Prysznice deszczowe"
+	},
+	"lightsnowandthunder": {
+		"en": "Light snow and thunder",
+		"tr": "Lekki śnieg i grzmoty",
+		"pl": "Lekki śnieg i grzmoty"
+	},
+	"heavysleet": {
+		"en": "Heavy sleet",
+		"tr": "Silny deszcz ze śniegiem",
+		"pl": "Silny deszcz ze śniegiem"
+	},
+	"fair": {
+		"en": "Fair",
+		"tr": "Sprawiedliwy",
+		"pl": "Sprawiedliwy"
+	},
+	"sleetshowersandthunder": {
+		"en": "Sleet showers and thunder",
+		"tr": "Deszcz ze śniegiem i grzmoty",
+		"pl": "Deszcz ze śniegiem i grzmoty"
+	},
+	"heavysnowshowers": {
+		"en": "Heavy snow showers",
+		"tr": "Ulewne opady śniegu",
+		"pl": "Ulewne opady śniegu"
+	},
+	"partlycloudy": {
+		"en": "Partly cloudy",
+		"tr": "Częściowe zachmurzenie",
+		"pl": "Częściowe zachmurzenie"
+	},
+	"sleetandthunder": {
+		"en": "Sleet and thunder",
+		"tr": "Deszcz ze śniegiem i grzmoty",
+		"pl": "Deszcz ze śniegiem i grzmoty"
+	},
+	"lightsnowshowers": {
+		"en": "Light snow showers",
+		"tr": "Lekkie opady śniegu",
+		"pl": "Lekkie opady śniegu"
+	},
+	"rainshowersandthunder": {
+		"en": "Rain showers and thunder",
+		"tr": "Deszcz i grzmoty",
+		"pl": "Deszcz i grzmoty"
+	},
+	"heavysnow": {
+		"en": "Heavy snow",
+		"tr": "Duże opady śniegu",
+		"pl": "Duże opady śniegu"
+	},
+	"snowandthunder": {
+		"en": "Snow and thunder",
+		"tr": "Śnieg i grzmot",
+		"pl": "Śnieg i grzmot"
+	},
+	"heavyrainshowersandthunder": {
+		"en": "Heavy rain showers and thunder",
+		"tr": "Ulewne deszcze i grzmoty",
+		"pl": "Ulewne deszcze i grzmoty"
+	},
+	"lightrainandthunder": {
+		"en": "Light rain and thunder",
+		"tr": "Lekki deszcz i grzmoty",
+		"pl": "Lekki deszcz i grzmoty"
+	}
+}
