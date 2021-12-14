@@ -1,7 +1,17 @@
 /*
- * 
- * 
- * 
+ 
+Szkic używa 1 279 366 bajtów (40%) pamięci programu. Maksimum to 3145728 bajtów.
+Zmienne globalne używają 52 796 bajtów (16%) pamięci dynamicznej, pozostawiając 274884 bajtów dla zmiennych lokalnych. Maksimum to 327680 bajtów.
+Szkic używa 1 279 114 bajtów (40%) pamięci programu. Maksimum to 3145728 bajtów.
+Zmienne globalne używają 52 684 bajtów (16%) pamięci dynamicznej, pozostawiając 274996 bajtów dla zmiennych lokalnych. Maksimum to 327680 bajtów.
+Szkic używa 1 279 226 bajtów (40%) pamięci programu. Maksimum to 3145728 bajtów.
+Zmienne globalne używają 52 684 bajtów (16%) pamięci dynamicznej, pozostawiając 274996 bajtów dla zmiennych lokalnych. Maksimum to 327680 bajtów.
+Szkic używa 1 279 278 bajtów (40%) pamięci programu. Maksimum to 3145728 bajtów.
+Zmienne globalne używają 52 684 bajtów (16%) pamięci dynamicznej, pozostawiając 274996 bajtów dla zmiennych lokalnych. Maksimum to 327680 bajtów.
+
+
+
+
  */
 
 

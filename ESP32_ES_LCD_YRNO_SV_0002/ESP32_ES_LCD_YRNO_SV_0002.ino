@@ -9,8 +9,8 @@
 
 
 #include "SPI.h"
-//#include "SD.h"
-//#include "FS.h"
+#include "SD.h"
+#include "FS.h"
 #include "Wire.h"
 
 #include "ES8388.h"  // https://github.com/maditnerd/es8388
@@ -90,68 +90,19 @@ String padZero(int nr){
   else return "0"+String(nr);
 }
 
-//+1 minuta ???? 30301
 
-//unsigned long sekCount = 0;
 
 void pogoda2LCD(){
     String isRun = audio.isRunning() ? "play":"stop";
     if (!audio.isRunning()) playCurStation();
-      
-      /*Serial.print("\n======================="); 
-      for (int n=0;n<7;n++) {
-          Serial.print("---"); Serial.print(n); Serial.print(" = "); Serial.println(clio.linieLCD[n]);
-      }*/
-      //Serial.print("1= "); Serial.println(clio.linieLCD[1]);
-      //Serial.print("2= "); Serial.println(clio.linieLCD[2]);
-      clio.println(clio.linieLCD[loopa],1);
+    clio.println(clio.linieLCD[loopa],1);
 
       
-      if (loopa==2) clio.println(radioBuffer1,0);
-      if (loopa==4) clio.println(clio.getClock(),0);
+      if (loopa==1) clio.println(radioBuffer1,0);
+      if (loopa==3) clio.println(clio.getClock(),0);
       
       loopa = (loopa+1) % 7;
-/*
-    
-      //sekCount++;
-      //Serial.print(loopa);Serial.print("=");Serial.println(sekCount);
-      
-      //Serial.println(jsonBuffer);
-      String linia1 = clio.splitValue(jsonBuffer, '\n',loopa);
-      //Serial.print("#");Serial.print(loopa);Serial.println(linia1);
-      if (loopa==0){
-          String StrMinutes = linia1;
-          int minutFromMillis = millis()/(60*1000);
-          int minutesStamp = StrMinutes.toInt()+ minutFromMillis; 
-          //Serial.print("millis()=");Serial.println(millis());  
-          //Serial.print(StrMinutes); Serial.print(", ms=");Serial.println(minutesStamp);        
-          int hh  = floor(minutesStamp/60);         
-          int mm  = minutesStamp-(hh*60);
-          //Serial.print(hh);Serial.print(":");Serial.println(mm);
-              //mm  = mm/60;
-          linia1 = padZero(hh)+":"+padZero(mm);
-        
-      }      
-      //if (loopa==1)  linia1 = linia1+" ***";
-      //if (loopa==2)  linia1 = linia1+" "+znakS+"C";
-      //if (loopa==3)  linia1 += " hPa";
-      //if (loopa==4)  linia1 += " m/s";
-      //if (loopa==5)  linia1 += " %";
-
-      //if (loopa==6)  linia1 = linia1;
-      //if (loopa==7)  linia1 = linia1;
-      //if (loopa==8) linia1 = linia1;
-      if (loopa==9) linia1 = radioBuffer1;
-      if (loopa==10) linia1 = isRun;
-      if (loopa<10){
-        clio.clear(); 
-        clio.println(linia1,1);
-        clio.println(linia2,0);
-        linia2=linia1;
-      }      
-      lastSecundDelay = millis();
-*/
-      
+ 
 }
 
 
@@ -229,10 +180,11 @@ void setup()
     SPI.begin(SPI_SCK, SPI_MISO, SPI_MOSI);
     SPI.setFrequency(1000000);
     SD.begin(SD_CS);
+    
     //WiFi.mode(WIFI_OFF);
     //WiFi.disconnect();
     WiFi.mode(WIFI_STA);
-    WiFi.begin(ssid, pass);
+    //WiFi.begin(ssid, pass);
       for (int i = 0; i < 8; i++) {
          wifiMulti.addAP(credential[i].ssid, credential[i].pass);
       } 
@@ -244,16 +196,18 @@ void setup()
       } 
     clio.drukLCD("Conected..."); 
     clio.println("WiFi",1); 
+    delay(800);
     Serial.printf_P(PSTR("Connected\r\nRSSI: "));
-    Serial.println(WiFi.status());
-    Serial.print(WiFi.RSSI());
-    Serial.print(" IP: ");
-    //Serial.println(WiFi.localIP());
-    //Serial.println(WiFi.SSID());
-    //Serial.println(WiFi.BSSID());    
-    //clio.println(WiFi.localIP(),0);
-    //clio.println(WiFi.RSSI(),1);
-    //delay(200);
+    //Serial.print("WiFi.status="); Serial.println(WiFi.status());
+    //Serial.print("WiFi.RSSI=");   Serial.println(WiFi.RSSI());
+    //Serial.print("IP: ");         Serial.println(WiFi.localIP());
+    //Serial.print("SSID: ");       Serial.println(WiFi.SSID());
+    
+        clio.ppp(WiFi.localIP());
+        delay(2800);
+        clio.println(String(WiFi.RSSI()),0);
+        clio.println(String(WiFi.SSID()),1);
+        delay(800);
     
     installServer();    
     Serial.printf("Connect to ES8388 codec... ");
@@ -262,8 +216,7 @@ void setup()
         delay(1000);
     }
     Serial.printf("OK\n");
-    es_volume(0);
-    
+    es_volume(0);   
     es.mute(ES8388::ES_OUT1, false);
     es.mute(ES8388::ES_OUT2, false);
     es.mute(ES8388::ES_MAIN, false);
@@ -276,15 +229,10 @@ void setup()
     audio.i2s_mclk_pin_select(I2S_MCLK);
     audio.setVolume(cur_volume); // 0...21
     audio_SetEQNr(String(cur_equalizer));
-      /* lcd.clear(); 
-      lcd.setCursor(0, 0);
-      lcd.print(WiFi.localIP());
-      lcd.setCursor(0, 1);
-      lcd.print(WiFi.RSSI());*/
-      //clio.drukiLCD(String(WiFi.localIP()).c_str(),  String(WiFi.RSSI()).c_str() );
-       //clio.drukiLCD("1111","222");
-       getYrnoPogoda(); 
+    getYrnoPogoda(); 
       delay(333);
+      //listFileFromSPIFFS();
+      //audio.connecttoFS(SPIFFS, "/r.mp3");
       playCurStation();
       
 }
@@ -408,7 +356,7 @@ String getRadioInfo(){
   String n = String(cur_station);
   String s = String(clio.radia[cur_station].info);
   String ri    = String(WiFi.RSSI());
-    //radioBuffer1 = s;
+    radioBuffer1 = extraInfo;
     radioBuffer2 = s;
 
   return n+sep+v+sep+ri+sep+s+sep+String(extraInfo)+sep+q;
@@ -421,11 +369,9 @@ void setCurVolume(){
     int ampli = clio.radia[cur_station].ampli;
     if (cur_volume<2) ampli = 0;
     audio.setVolume(cur_volume + ampli); // 0...21
-    //onScreens(String(cur_volume).c_str(),377);
-    //qqqqqqqqqqqqqqqqqqqqqqqqqqqq
-    //clio.println("Volume=",0);
-    //clio.println(String(cur_volume),1);
-    Serial.println("???Vol="+String(cur_volume)); 
+    //clio.println("Vol="+String(cur_volume),0);
+    //clio.println(("Volume="+String(cur_volume)).c_str(),1); 
+    Serial.println("?????Vol="+String(cur_volume)); 
     savePreferences();
 }
 
@@ -464,8 +410,16 @@ void playCurStation(){
     if (cur_station < 0) cur_station = 4;
     if (cur_station > 4) cur_station = 0; 
     es_volume(0);
-    audio.connecttohost(clio.radia[cur_station].stream);   
-    onScreens("cur_station",("Station="+String(cur_station)).c_str(),423);
+        String CoJestGrane = "/"+String(clio.radia[cur_station].info)+".mp3"; 
+        if (!SPIFFS.exists(CoJestGrane)){
+            CoJestGrane = "/r.mp3";
+        }
+        const char* stacjaNazwa = CoJestGrane.c_str();
+        Serial.print("#473 stacjaNazwa=");Serial.println(stacjaNazwa);
+            
+    audio.connecttohost(clio.radia[cur_station].stream);
+    clio.println(("Stacja="+String(clio.radia[cur_station].info)).c_str(),0);   
+    //onScreens("cur_station",("Station="+String(cur_station)).c_str(),423);
     Serial.print("clio.radia=");
     Serial.print(clio.radia[cur_station].info);
     Serial.println(clio.radia[cur_station].stream);
@@ -531,6 +485,7 @@ void audio_SetStationUrl(const String ParamValue){
       es_volume(volume);
 }
 
+
 void esp_reBootSleep(const String ParamValue){
     if (ParamValue=="0") { 
         audio.setVolume(0);
@@ -562,6 +517,7 @@ void esp_reBootSleep(const String ParamValue){
 /************* SERVER *******************/
 
 void installServer(){
+  clio.println("installServer...",1);
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
     request->send(200, "text/html", PAGE_HTML);
   });

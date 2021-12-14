@@ -17,12 +17,8 @@ void ESPio::initLED(int pin)
 void ESPio::initLCD(int IIC_DATA, int IIC_CLK)
 {
       Wire.begin(IIC_DATA, IIC_CLK); 
-      //LiquidCrystal_I2C lcd(0x20, 16, 2); 
       lcd.init();                    
       lcd.backlight();
-      //lcd.setCursor(0, 0); lcd.print("liniaA");
-      //lcd.setCursor(0, 1); lcd.print("liniaB");
-      //delay(333);
 }
 void ESPio::clear()
 {
@@ -45,30 +41,24 @@ void ESPio::println(String linia, int col)
 }
 void ESPio::drukLCD(String linia)
 {
-  Serial.print("!drukLCD=");Serial.println(linia);
+  //Serial.print("!drukLCD=");Serial.println(linia);
      ESPio::clear(); 
      lcd.print(String(linia).substring(0,16));
      lcd.setCursor(0, 1); 
      lcd.print(String(linia).substring(16,32));
 }
-void ESPio::drukiLCD(char const *linia1, char const *linia2)
-{
-     ESPio::clear();
-     lcd.print(linia1);
-     lcd.setCursor(0, 1); 
-     lcd.print(linia2);
+
+void ESPio::ppp(IPAddress linia)
+{  
+      lcd.clear();
+     lcd.setCursor(0, 0); 
+     lcd.print(linia);
 }
-
-
-
-
 void ESPio::ledled()
 {
   if(_pin) digitalWrite(_pin, !digitalRead(_pin));
 }
-
-
-
+/*
 void ESPio::dot()
 {
   digitalWrite(_pin, HIGH);
@@ -84,7 +74,8 @@ void ESPio::dash()
   digitalWrite(_pin, LOW);
   delay(250);
 }
-
+*/
+/*
 bool ESPio::inArray(int pin, byte piny[])
 {
   bool ret=false;
@@ -95,7 +86,7 @@ bool ESPio::inArray(int pin, byte piny[])
    }
   return ret;
 }
-
+*/
 String ESPio::array2json(byte arr[],int len)
 {
     String json_str = "[";

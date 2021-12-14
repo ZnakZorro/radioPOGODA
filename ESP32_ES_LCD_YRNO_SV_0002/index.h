@@ -194,6 +194,16 @@ let show=(co,ten)=>{
   _$$(".red").forEach((e)=>{e.classList.remove("active")});
    ten.classList.add("active");   
 }
+
+let cn=(param)=>{
+  if (confirm("Rily!") == true) sn(param);
+}
+
+let klik=(t)=>{
+  let all = t.parentNode.querySelectorAll("button");
+  all.forEach((o)=>o.classList.remove("active"));
+  t.classList.add("active");
+}
 </script>
 </head>
 <body>
@@ -250,10 +260,10 @@ let show=(co,ten)=>{
   </div>
   
     <div class="grid col prima small">
-      <button onclick='sn("radio?r=0")'>Reboot</button>
+      <button onclick='cn("radio?r=0")'>Reboot</button>
       <button onclick='sn("radio?m=1")'>Music</button>
       <button onClick='sn("radio?r=1")'>Replay</button>
-      <button onclick='sn("radio?r=2")'>Sleep</button>
+      <button onclick='cn("radio?r=2")'>Sleep</button>
       <button class="red" onclick='show("streams",this)'>Stream</button>
     </div>
   
@@ -261,11 +271,11 @@ let show=(co,ten)=>{
 <hr /> 
 
   <div class="grid col small eq">
-    <button onClick='sn("radio?q=0");' id="eq0">Mowa</button>
-    <button onClick='sn("radio?q=1");' id="eq1">Muzyka</button>
-    <button onClick='sn("radio?q=2");' id="eq2">Jazz</button>
-    <button onClick='sn("radio?q=3");' id="eq3">Classic</button>
-    <button onClick='sn("radio?q=4");' id="eq4">Flat</button>
+    <button onClick='sn("radio?q=0");klik(this);' id="eq0">Mowa</button>
+    <button onClick='sn("radio?q=1");klik(this);' id="eq1">Muzyka</button>
+    <button onClick='sn("radio?q=2");klik(this);' id="eq2">Jazz</button>
+    <button onClick='sn("radio?q=3");klik(this);' id="eq3">Classic</button>
+    <button onClick='sn("radio?q=4");klik(this);' id="eq4">Flat</button>
   </div>
 
 </div>
@@ -283,11 +293,11 @@ let show=(co,ten)=>{
 <style>
   div.results{margin: 1em 0;}
   div.values{
-    height: 1.2em;
+    height: 1.5em;
     display: flex;
     justify-content: space-evenly;
   }
-  div.values input{color:black; width:4em; display:inline-block; text-align:center;}
+  div.values input{color:black; width:4em;text-align:center; padding:0.3em 0;border-radius:0.5em;}
   div#hslider{
     display: flex;
     justify-content: space-evenly;
@@ -297,8 +307,10 @@ let show=(co,ten)=>{
   </style>
 <br />
 
-<button onClick="toggleEQ()" class="small"> Eq </button>
-   
+<div class="wrap">
+<button onClick="toggleEQ()" class="small" style="width:4em;"> Eq </button>
+</div>
+  
 <div id="eqqq" class="hidden" style="max-width: 600px;margin: 1.5em auto;">
           
           <div class="results">
@@ -311,7 +323,7 @@ let show=(co,ten)=>{
     <div class="hsliders">
         <div id="slider"></div>
     </div>
-    <br />
+    <br /><br />
     <div id="hslider">
         <div class="sliders"></div> 
         <div class="sliders"></div> 

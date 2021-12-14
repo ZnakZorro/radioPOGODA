@@ -6,7 +6,7 @@
 #define ooolcdRows      2
 #define ooolcdADR    0x20
 /*****************************************/
-#define ARRAYSIZE 16
+#define ARRAYSIZE 7
 
 #include <Arduino.h>
 #include <LiquidCrystal_I2C.h>
@@ -27,11 +27,11 @@ class ESPio
     void print(String linia);
     void println(String linia, int col);
     void drukLCD(String linia);
-    void drukiLCD(char const *linia1,char const *linia2);
+    void ppp(IPAddress linia);
     void ledled();
-    void dot();
-    void dash();
-    bool inArray(int pin, byte piny[]);
+    //void dot();
+    //void dash();
+    //bool inArray(int pin, byte piny[]);
     String array2json(byte arr[],int size);
     stacjeSTRUCT radia [5]={
       {0, "TOK-FM",    "http://pl-play.adtonos.com/tok-fm"},

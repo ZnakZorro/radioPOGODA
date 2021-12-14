@@ -1,3 +1,21 @@
+
+void listFileFromSPIFFS(){
+    unsigned int totalBytes = SPIFFS.totalBytes();
+    unsigned int usedBytes = SPIFFS.usedBytes();
+    Serial.println("\n===== File system info =====");
+    Serial.print("Total space: "); Serial.print(totalBytes); Serial.println(" byte");
+    Serial.print("Total used:  "); Serial.print(usedBytes); Serial.println(" byte");
+    Serial.println();
+  File root = SPIFFS.open("/");  
+  File file = root.openNextFile();
+  while(file){
+      Serial.print("FILE: "); Serial.print(file.name());
+      Serial.print("\t\t");   Serial.println(file.size(), DEC);      
+      file = root.openNextFile();
+  }
+}
+
+
 /*
 String getValue(String data, char separator, int index)
 {
