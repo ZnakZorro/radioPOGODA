@@ -1,4 +1,4 @@
-
+/*
 void listFileFromSPIFFS(){
     unsigned int totalBytes = SPIFFS.totalBytes();
     unsigned int usedBytes = SPIFFS.usedBytes();
@@ -14,7 +14,7 @@ void listFileFromSPIFFS(){
       file = root.openNextFile();
   }
 }
-
+*/
 
 /*
 String getValue(String data, char separator, int index)

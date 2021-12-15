@@ -11,6 +11,7 @@
 #include "SPI.h"
 #include "SD.h"
 #include "FS.h"
+#include "SPIFFS.h"
 #include "Wire.h"
 
 #include "ES8388.h"  // https://github.com/maditnerd/es8388
@@ -80,9 +81,11 @@ AsyncWebServer server(80);
 Preferences preferences;
 
 //----------------------------------------------------------------------------------------------------------------------
-void onScreens(const char *linia1, const char *linia2, int lineNR){
-  clio.drukLCD(linia2);
-  Serial.printf("======================================\n %u :: %s:: %s\n", lineNR,linia1,linia2);
+void onScreens(const char *linia0, const char *linia1, int lineNR){
+  //clio.drukLCD(linia1);
+        clio.println(linia0,0);
+        clio.println(linia1,1);  
+  Serial.printf("======================================\n %u :: %s:: %s\n", lineNR,linia0,linia1);
 }
 
 String padZero(int nr){
@@ -180,6 +183,13 @@ void setup()
     SPI.begin(SPI_SCK, SPI_MISO, SPI_MOSI);
     SPI.setFrequency(1000000);
     SD.begin(SD_CS);
+
+          if (!SPIFFS.begin(true)) {
+                onScreens("Error","SPIFFS",186);
+          } else {
+                onScreens("SPIFFS","OK",188);
+                //listFileFromSPIFFS();
+          }
     
     //WiFi.mode(WIFI_OFF);
     //WiFi.disconnect();
@@ -200,7 +210,7 @@ void setup()
     Serial.printf_P(PSTR("Connected\r\nRSSI: "));
     //Serial.print("WiFi.status="); Serial.println(WiFi.status());
     //Serial.print("WiFi.RSSI=");   Serial.println(WiFi.RSSI());
-    //Serial.print("IP: ");         Serial.println(WiFi.localIP());
+    Serial.print("IP: ");         Serial.println(WiFi.localIP());
     //Serial.print("SSID: ");       Serial.println(WiFi.SSID());
     
         clio.ppp(WiFi.localIP());
@@ -231,9 +241,9 @@ void setup()
     audio_SetEQNr(String(cur_equalizer));
     getYrnoPogoda(); 
       delay(333);
-      //listFileFromSPIFFS();
-      //audio.connecttoFS(SPIFFS, "/r.mp3");
-      playCurStation();
+      es_volume(volume);
+      audio.connecttoFS(SPIFFS, "/r.mp3");
+      //playCurStation();
       
 }
 //----------------------------------------------------------------------------------------------------------------------
@@ -356,8 +366,8 @@ String getRadioInfo(){
   String n = String(cur_station);
   String s = String(clio.radia[cur_station].info);
   String ri    = String(WiFi.RSSI());
-    radioBuffer1 = extraInfo;
-    radioBuffer2 = s;
+    radioBuffer1 = s+sep+ri;
+    radioBuffer2 = extraInfo;
 
   return n+sep+v+sep+ri+sep+s+sep+String(extraInfo)+sep+q;
 }
@@ -394,10 +404,6 @@ void audio_SetStationNr(String ParamValue){
 void audio_ChangeStation(String ParamValue){
     //int valu = ParamValue.toInt();
     Serial.println('+++++++++++++++++++++');
-    //Serial.println(valu);
-    //Serial.println(isnan(valu));
-    //Serial.println(isint(valu));
-    //if (isnan(valu)) cur_station = valu;
     if (ParamValue=="p") cur_station++;
     if (ParamValue=="m") cur_station--;
     if (ParamValue=="*") cur_station++;
@@ -425,36 +431,6 @@ void playCurStation(){
     Serial.println(clio.radia[cur_station].stream);
     savePreferences();
 }
-/*
-void playCurStationURL(){
-        audio.stopSong();
-        //es.mute(ES8388::ES_MAIN, true);
-        if (cur_station <  0)            cur_station = last_stations;
-        if (cur_station > last_stations) cur_station = 0;    
-        //onScreens(String(cur_station).c_str(),392);
-        savePreferences();
-        //delay(222);
-        //es.mute(ES8388::ES_MAIN, false);
-        audio.connecttohost(clio.radia[cur_station].stream);  
-      
-}
-*/
-/* 
-// z mp3
-  void playCurStation(){
-        String CoJestGrane = "/"+String(clio.radia[cur_station].info)+".mp3"; 
-        if (!SPIFFS.exists(CoJestGrane)){
-            CoJestGrane = "/r.mp3";
-        }
-        const char* stacjaNazwa = CoJestGrane.c_str();
-        //onScreens(stacjaNazwa,401);
-        audio.stopSong();
-        es.mute(ES8388::ES_MAIN, true);
-        delay(222);
-        es.mute(ES8388::ES_MAIN, false);
-        audio.connecttoFS(SPIFFS, stacjaNazwa);
-      
-}*/
 
 void audio_SetEQNr(String ParamValue){
       cur_equalizer = ParamValue.toInt();
