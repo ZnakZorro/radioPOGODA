@@ -1,3 +1,37 @@
+
+
+void zapiszSPIFFS(const char *name, const char *content){
+    File file = SPIFFS.open(name, FILE_WRITE);
+    if(!file){
+         Serial.println("error writing");
+         return;
+    }
+    if (file.print(content)) {
+          Serial.print("File was written  zapiszSPIFFS="); Serial.print(name);  Serial.println(content); 
+    } else {
+          Serial.println("write failed");
+    }
+    file.close();
+}
+
+String odczytajSPIFFS(const char *name){
+    File file = SPIFFS.open(name, FILE_READ);
+    String content = file.readStringUntil('\n');
+    //Serial.println(name); 
+    //Serial.println(content);    
+    file.close();
+    return content;
+}
+
+
+/*
+void transCSV2Array(String (& arr) [numParams], String csv){
+  for (int i = 0; i < numParams; i++)
+     arr[i] = strSplit(csv, ';', i);
+}
+*/
+
+
 /*
 void listFileFromSPIFFS(){
     unsigned int totalBytes = SPIFFS.totalBytes();

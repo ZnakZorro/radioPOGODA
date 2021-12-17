@@ -115,7 +115,9 @@ String ESPio::splitValue(String data, char separator, int index)
 
 String ESPio::payload2LCD(String payload){
   int j=0;
-  minuteStamp = (ESPio::splitValue(payload,'\n',0)).toInt();
+  String minuteStr = (ESPio::splitValue(payload,'\n',0));
+  minuteStr.trim();
+  minuteStamp = minuteStr.toInt();
   Serial.print("minuteStamp=");  Serial.println(minuteStamp);
   for (int i=1; i<8; i++){
     String found = ESPio::splitValue(payload,'\n',i);
@@ -134,9 +136,10 @@ String ESPio::padZero(int nr){
 
 String ESPio::getClock(){         
     unsigned long minutFromMillis = millis()/(60*1000);
-    minutFromMillis +=minuteStamp;        
-    int hh  = floor(minutFromMillis/60);         
-    int mm  = minutFromMillis-(hh*60);        
+    minutFromMillis += minuteStamp;        
+    long hh  = floor(minutFromMillis/60);         
+    long mm  = minutFromMillis-(hh*60);  
+    Serial.print(minutFromMillis); Serial.print(" / ");Serial.print(hh); Serial.print(" / "); Serial.println(mm);     
     return ESPio::padZero(hh)+":"+ESPio::padZero(mm);
 }
 

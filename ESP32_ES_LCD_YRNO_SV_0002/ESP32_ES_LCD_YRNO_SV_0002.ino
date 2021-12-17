@@ -58,7 +58,7 @@ unsigned long secundDelay = 1000*coIleSekund;
 unsigned long lastSecundDelay = 0;  
 unsigned long licznik = 0;
 
-unsigned long timerDelay15m = 1000 * 60 *15*3;  // 15minut * 3 = 45
+unsigned long timerDelay15m = 1000 * 60 *15 * 1;  // 15minut * 3 = 45
 unsigned long lastTime = 0;
 
 String radioBuffer1;
@@ -102,6 +102,7 @@ void pogoda2LCD(){
 
       
       if (loopa==1) clio.println(radioBuffer1,0);
+      if (loopa==2) clio.println(radioBuffer2,0);
       if (loopa==3) clio.println(clio.getClock(),0);
       
       loopa = (loopa+1) % 7;
@@ -323,7 +324,9 @@ void audio_eof_mp3(const char *info){  //end of file
 void audio_showstation(const char *info){
   snprintf(extraInfo, 64, info);
     //Serial.print("station     ");Serial.println(info);
-    onScreens("audio_showstation::",String(info).c_str(),326);
+    //onScreens("audio_showstation::",String(info).c_str(),326);
+    onScreens(String(clio.radia[cur_station].info).c_str(),String(info).c_str(),327);
+    
     radioBuffer1 = String(info).substring(0,16);
     radioBuffer2 = String(info).substring(16,32);
     es_volume(volume);
@@ -331,14 +334,16 @@ void audio_showstation(const char *info){
 void audio_showstreaminfo(const char *info){
   snprintf(extraInfo, 64, info);
     //Serial.print("streaminfo  ");Serial.println(info);
-    onScreens("streaminfo::",String(info).c_str(),187);
+    //onScreens("streaminfo::",String(info).c_str(),187);
+    onScreens(String(clio.radia[cur_station].info).c_str(),String(info).c_str(),337);
     radioBuffer1 = String(info).substring(0,16);
     radioBuffer2 = String(info).substring(16,32);
 }
 void audio_showstreamtitle(const char *info){
   snprintf(extraInfo, 64, info);
     //Serial.print("streamtitle ");Serial.println(info);
-    onScreens("Streamtitle::",String(info).c_str(),191);
+    //onScreens("Streamtitle::",String(info).c_str(),191);
+    onScreens(String(clio.radia[cur_station].info).c_str(),String(info).c_str(),345);
 }
 void audio_bitrate(const char *info){
     Serial.print("bitrate     ");Serial.println(info);
@@ -366,7 +371,7 @@ String getRadioInfo(){
   String n = String(cur_station);
   String s = String(clio.radia[cur_station].info);
   String ri    = String(WiFi.RSSI());
-    radioBuffer1 = s+sep+ri;
+    radioBuffer1 = s+sep+String(extraInfo);
     radioBuffer2 = extraInfo;
 
   return n+sep+v+sep+ri+sep+s+sep+String(extraInfo)+sep+q;
@@ -422,7 +427,7 @@ void playCurStation(){
         }
         const char* stacjaNazwa = CoJestGrane.c_str();
         Serial.print("#473 stacjaNazwa=");Serial.println(stacjaNazwa);
-            
+        //audio.connecttoFS(SPIFFS, stacjaNazwa);   
     audio.connecttohost(clio.radia[cur_station].stream);
     clio.println(("Stacja="+String(clio.radia[cur_station].info)).c_str(),0);   
     //onScreens("cur_station",("Station="+String(cur_station)).c_str(),423);
@@ -451,11 +456,11 @@ void audio_SetEQ(String ParamValue){
 }
 
 void audio_SetStationUrl(const String ParamValue){
-      //onScreens(("Url="+String(ParamValue)),483);
+      //onScreens(("Url=",String(ParamValue).c_str()),459);
       audio.stopSong();
       es_volume(0);
       audio.setVolume(0);
-      delay(333);
+      //delay(333);
       audio.connecttohost(ParamValue.c_str());
       audio.setVolume(cur_volume);
       es_volume(volume);
@@ -481,7 +486,15 @@ void esp_reBootSleep(const String ParamValue){
   
 }
 
-
+void saveRadioStreams(const String ParamValue){
+    Serial.println("\nsaveRadioStreams=====");
+    Serial.println(ParamValue);
+    zapiszSPIFFS("/rrr.json",ParamValue.c_str());
+    String odczyt = odczytajSPIFFS("/rrr.json");
+    Serial.println("\nodczyt=============");
+    Serial.println(odczyt);
+    
+}
 
 
 
@@ -536,7 +549,8 @@ void installServer(){
            if (ParamName=="t")  audio_SetStationNr(ParamValue);
            if (ParamName=="q")  audio_SetEQNr(ParamValue);
            if (ParamName=="qq")  audio_SetEQ(ParamValue);
-           if (ParamName=="z")  savePreferences(); 
+           if (ParamName=="f")  savePreferences(); 
+           if (ParamName=="z")  saveRadioStreams(ParamValue); 
            if (ParamName=="x")  audio_SetStationUrl(ParamValue);
            
            if (ParamName=="r")  {esp_reBootSleep(ParamValue);}

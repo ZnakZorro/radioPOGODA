@@ -14,10 +14,11 @@ const char PAGE_HTML[] PROGMEM = R"=====(
 <link rel="icon" type="image/svg+xml" href="radio.svg">  
 <style>
 .bbb {background-color:#056da1;}
-*,html{color:#eee;}
 body{background-color:#214960;}
 body{padding:0;margin:5px;background-blend-mode:color-dodge;background-repeat:no-repeat;background-position:center 45vh;background-size:50vh}
-*,html{font-size:14pt;font-family:Arial,Helvetica,sans-serif;text-shadow: 2px 2px 2px #888;}
+*,html{font-size:14pt;font-family:Arial,Helvetica,sans-serif;
+  /*text-shadow: 1px 1px 1px #888;*/
+  }
 .wrap {z-index:2;margin:auto;padding:0.5rem;max-width:600px; }
 .grid{display:grid;grid-gap:.25em; margin-top:0.2em;}
 .col {width:100%;text-align:center;margin:.25em auto;}
@@ -27,9 +28,9 @@ body{padding:0;margin:5px;background-blend-mode:color-dodge;background-repeat:no
 .col-lg{grid-template-columns:repeat(auto-fit,minmax(90px,1fr));}
 .prima button {background-color:#f5be47;}  
 h3{margin:.3em 0}
-h3,#info {text-shadow: none;}
+h3,#info {color:#eee;}
 #czas,#info{font-size:.8rem;font-family:monospace}
-#info{min-height:5em}
+#info{min-height:5em;color:#eee;}
 button{background:#df513b;color:white;border:none;box-shadow:1px 1px 1px 0px #666;border-radius:0.75em;padding: 0.5em 0.1em;margin: 0.2em 0;}
 .active,button:active,button:visited{background-color:#4564a4!important;color:white!important;}
 .small button{font-size:.85rem}
@@ -44,6 +45,7 @@ button#btn-slij {width:19%;background:#4169e1}
 .stu button {background:#4169e1;}
 button.red {background:#df513b;}
 button.small {background: #4564a4;min-width: 4em;padding: 0.3em;}
+button.smal {background: #666;min-width: 2.5em;padding: 0.2em;}
 div.gr {display:inline-block;margin-right:1em;}
 div.gr button {
     font-size: 0.9rem;
@@ -54,12 +56,61 @@ div.gr button {
     white-space: nowrap;
     overflow: hidden;
 }
-
 .hidden {display:none;}
-
 div.gr button:first-child{background:darkcyan;}
-
 @media (orientation: landscape) {body {overflow:auto;}}
+  
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  padding-top: 100px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0,0,0);
+  background-color: rgba(0,0,0,0.4);
+}
+.modal-content {
+    background-color: #eee;
+    margin: auto;
+    padding: 3%;
+    border: 1px solid #888;
+    width: 88%;
+    height: 90%;
+    position: fixed;
+    top: 3%;
+    left: 3%;
+    color:black;
+    overflow:auto;
+}
+#modalRadia > div {
+    border: 1px solid silver;
+    margin: 0.5em 0;
+    padding: 0.7vw;
+    background: #d8d8d8;
+    box-shadow: 1px 1px 3px #888;
+}
+#modalAdmin{
+  margin-top:1em;
+}
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}  
+input.inp1, input.inp2 {font-size:0.9em;}  
+input.inp1 {width:24vw;}  
+input.inp2 {width:80vw;}  
 </style>
 <script>
 const _$=e=>document.querySelector(e);
@@ -208,6 +259,9 @@ let klik=(t)=>{
 </head>
 <body>
 
+
+
+
 <div class="wrap">
   <div class="col">
     <h3>@radio Salon</h3>
@@ -255,7 +309,7 @@ let klik=(t)=>{
     <button onClick='sn("radio?n=0")' class="btn ex">Info</button>
     <button onClick='sn("radio?start=0")' class="btn ex">Mute</button>   
     <button onClick='window.location.reload(true);' class="btn ex">Reload</button>    
-    <button onClick='sn("radio?v=z")' class="btn ex">Zapisz</button>    
+    <button onClick='sn("radio?v=f")' class="btn ex">Zapisz</button>    
     <button onClick='show("numery",this)' class="btn ex red active">Stacje</button>    
   </div>
   
@@ -280,9 +334,90 @@ let klik=(t)=>{
 
 </div>
 
+<div class="wrap">
+  <button onClick="toggleEQ()" class="small" style="float:left;"> Eq </button>
+  <button id="myBtn" class="small" style="float:right;width:4em;">{ }</button>
+</div>
+  
 
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <div id="modalRadia"></div>
+    <div id="modalAdmin">
+      <button class="small" onClick="DodajStream()">Dodaj</button>
+      <button class="small" onClick="ZapiszStream()">Zapisz</button>
+    </div>
+  </div>
+</div>
 
+<script>
+let modal  = document.getElementById("myModal");
+let obtn   = document.getElementById("myBtn");
+let xclose = document.querySelector(".close");
 
+xclose.onclick = ()=> {modal.style.display = "none";}
+window.onclick = (event)=> {if (event.target == modal) {modal.style.display = "none";}}
+obtn.onclick   = ()=> {
+    if (localStorage.getItem(radio)){
+      locale[radio] = JSON.parse(localStorage.getItem(radio))[radio];
+      opiszLocaleModal();
+  }
+  modal.style.display = "block";
+}
+
+const usun=(kk)=>{
+  if (confirm("Usuwasz "+kk+" :: "+locale[radio][kk]) == true) {
+      console.log(kk); 
+      for(let k in locale[radio]){
+          if (k===kk ) delete locale[radio][k];
+      }
+      opiszLocaleModal();
+  }
+}
+const opiszLocaleModal=()=>{
+  //console.log(locale[radio]);
+  //let modalRadia = _$("#modalRadia");
+      let i = 1;
+      let html="<h4>Radio streams:</h4>\n";
+      for(let k in locale[radio]){
+        let v = locale[radio][k];
+        //console.log(i,k,v);
+        let closeBtn='<button title="Usuń" class="smal" onClick="usun(\''+k+'\')">'+i+'</button> ';
+        html += '<div>'+closeBtn+' <input class="inp1" value="'+k+'" /> <input class="inp2" value="'+v+'" /></div>'+"\n";
+        i++;
+      }
+   //console.log(html);
+    _$("#modalRadia").innerHTML = html;
+}
+
+const DodajStream=()=>{
+  console.log("DodajStream");
+  let nr = _$$("#modalRadia div").length+1;
+  locale[radio]['nowy_'+nr]="";
+  opiszLocaleModal();
+}
+const ZapiszStream=()=>{
+  console.log("ZapiszStream");
+  let modalRadia = _$$("#modalRadia div");
+  let obj = {}
+  modalRadia.forEach((m)=>{
+    let inputy = m.querySelectorAll("input");
+      let k = inputy[0].value;
+      let v = inputy[1].value;   
+      if (k && v){
+          locale[radio][k]=v;
+          obj[k]=v;
+      }
+  });
+  locale[radio] = obj;
+  console.log(locale[radio]);
+  let zapis = JSON.stringify(locale,null,"\t");
+  console.log(zapis);
+  sn("radio?z="+zapis);
+}
+
+</script>
 
 
 
@@ -307,9 +442,7 @@ let klik=(t)=>{
   </style>
 <br />
 
-<div class="wrap">
-<button onClick="toggleEQ()" class="small" style="width:4em;"> Eq </button>
-</div>
+
   
 <div id="eqqq" class="hidden" style="max-width: 600px;margin: 1.5em auto;">
           
