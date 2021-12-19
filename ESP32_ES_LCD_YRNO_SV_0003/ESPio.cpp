@@ -97,6 +97,7 @@ String ESPio::array2json(byte arr[],int len)
   return json_str;
 }
 
+
 String ESPio::splitValue(String data, char separator, int index)
 {
     int found = 0;
@@ -145,7 +146,7 @@ String ESPio::getClock(){
     minutFromMillis += minuteStamp;        
     long hh  = floor(minutFromMillis/60);         
     long mm  = minutFromMillis-(hh*60);  
-    Serial.print(minuteStamp); Serial.print(" / ");Serial.print(minutFromMillis); Serial.print(" / ");Serial.print(hh); Serial.print(" / "); Serial.println(mm);     
+    //Serial.print(minuteStamp); Serial.print(" / ");Serial.print(minutFromMillis); Serial.print(" / ");Serial.print(hh); Serial.print(" / "); Serial.println(mm);     
     return ESPio::padZero(hh)+":"+ESPio::padZero(mm);
 }
 

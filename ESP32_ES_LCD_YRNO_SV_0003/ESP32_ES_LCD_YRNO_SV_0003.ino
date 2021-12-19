@@ -61,14 +61,18 @@ unsigned long licznik = 0;
 unsigned long timerDelay15m = 1000 * 60 *15 * 1;  // 15minut * 3 = 45
 unsigned long lastTime = 0;
 
-String radioBuffer1;
-String radioBuffer2;
+char const *hostStream;
+char const *hostName;
+//char extraHost[64];
+
+//String radioBuffer1;
+//String radioBuffer2;
 String jsonBuffer;
 int loopa=0;
 String linia2="";
 char   znakS = (char)223;
 
-char extraInfo[64];
+//char extraInfo[64];
 bool isSD        = false;
 
 WiFiMulti wifiMulti;
@@ -99,10 +103,12 @@ void pogoda2LCD(){
     String isRun = audio.isRunning() ? "play":"stop";
     if (!audio.isRunning()) playCurStation();
     clio.println(clio.linieLCD[loopa],1);
-
+  
       
-      if (loopa==1) clio.println(radioBuffer1,0);
-      if (loopa==2) clio.println(radioBuffer2,0);
+      //if (loopa==1) clio.println(radioBuffer1,0);
+      //if (loopa==2) clio.println(radioBuffer2,0);
+      if (loopa==1) clio.println(hostName,0);
+      if (loopa==2) clio.println(hostStream,0);
       if (loopa==3) clio.println(clio.getClock(),0);
       
       loopa = (loopa+1) % 7;
@@ -163,6 +169,8 @@ void es_volume(int volum){
     es.volume(ES8388::ES_MAIN, volum);
     es.volume(ES8388::ES_OUT1, volum);
     es.volume(ES8388::ES_OUT2, volum);
+    if (volum==0) {audio.setVolume(0); audio.stopSong();}
+    else          audio.setVolume(cur_volume);
 }
 
 void setup()
@@ -189,7 +197,7 @@ void setup()
                 onScreens("Error","SPIFFS",186);
           } else {
                 onScreens("SPIFFS","OK",188);
-                listFileFromSPIFFS();
+                //listFileFromSPIFFS();
           }
     
     //WiFi.mode(WIFI_OFF);
@@ -323,28 +331,33 @@ void audio_eof_mp3(const char *info){  //end of file
     playCurStation();
 }
 void audio_showstation(const char *info){
-  snprintf(extraInfo, 64, info);
+  //snprintf(extraInfo, 64, info);
     //Serial.print("station     ");Serial.println(info);
     //onScreens("audio_showstation::",String(info).c_str(),326);
-    onScreens(String(clio.radia[cur_station].info).c_str(),String(info).c_str(),327);
-    
-    radioBuffer1 = String(info).substring(0,16);
-    radioBuffer2 = String(info).substring(16,32);
+    onScreens(String(clio.radia[cur_station].info).c_str(),String(info).c_str(),337);  
+    //radioBuffer1 = String(info).substring(0,16);
+    //radioBuffer2 = String(info).substring(16,32);
+        //hostStream = String(info).substring(0,16).c_str();
+        //hostName   = String(info).substring(16,32).c_str();
     es_volume(volume);
 }
 void audio_showstreaminfo(const char *info){
-  snprintf(extraInfo, 64, info);
+  //snprintf(extraInfo, 64, info);
     //Serial.print("streaminfo  ");Serial.println(info);
     //onScreens("streaminfo::",String(info).c_str(),187);
-    onScreens(String(clio.radia[cur_station].info).c_str(),String(info).c_str(),337);
-    radioBuffer1 = String(info).substring(0,16);
-    radioBuffer2 = String(info).substring(16,32);
+    //onScreens(String(clio.radia[cur_station].info).c_str(),String(info).c_str(),348);
+    //radioBuffer1 = String(info).substring(0,16);
+    //radioBuffer2 = String(info).substring(16,32);
+    //onScreens(String(hostName).c_str(),String(hostStream).c_str(),351);
 }
 void audio_showstreamtitle(const char *info){
-  snprintf(extraInfo, 64, info);
+  //hostName   = String(info).substring(0,16).c_str();
+  //hostStream = String(info).substring(16,32).c_str();
+  //snprintf(extraInfo, 64, info);
     //Serial.print("streamtitle ");Serial.println(info);
     //onScreens("Streamtitle::",String(info).c_str(),191);
-    onScreens(String(clio.radia[cur_station].info).c_str(),String(info).c_str(),345);
+    //onScreens(String(clio.radia[cur_station].info).c_str(),String(info).c_str(),345);
+    //onScreens(String(hostName).c_str(),String(hostStream).c_str(),360);
 }
 void audio_bitrate(const char *info){
     Serial.print("bitrate     ");Serial.println(info);
@@ -357,7 +370,7 @@ void audio_icyurl(const char *info){  //homepage
 }
 void audio_lasthost(const char *info){  //stream URL played
     //Serial.print("lasthost    ");Serial.println(info);
-    onScreens("Lasthost::",String(info).c_str(),203);
+    onScreens("Lasthost::",String(info).c_str(),373);
 }
 void audio_eof_speech(const char *info){
     Serial.print("eof_speech  ");Serial.println(info);
@@ -370,12 +383,14 @@ String getRadioInfo(){
   String v = String(cur_volume);
   String q = String(cur_equalizer);
   String n = String(cur_station);
-  String s = String(clio.radia[cur_station].info);
+  //String s = String(clio.radia[cur_station].info);
+  String s = String(hostName);
   String ri    = String(WiFi.RSSI());
     //radioBuffer1 = s+sep+String(extraInfo);
     //radioBuffer2 = extraInfo;
+    
 
-  return n+sep+v+sep+ri+sep+s+sep+String(extraInfo)+sep+q;
+  return n+sep+v+sep+ri+sep+s+sep+String(hostStream)+sep+q;
 }
 
 
@@ -497,18 +512,30 @@ void audio_setStationByStringNumber(const String ParamValue){
     setStationByNumber(nr);
 }
 
+//nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn
 void setStationByNumber(int nr){
     String odczyt = odczytajSPIFFScsv("/streams.csv");
     String linia = clio.splitValue(odczyt, '\n',nr);
     String name = clio.splitValue(linia, ';',0);
     String host = clio.splitValue(linia, ';',1);
-    Serial.println("++++++++++++++++");
-    Serial.println(name);
-    Serial.println(host);
-    snprintf(extraInfo, 32, name.c_str());
-    radioBuffer2 = name;
-  es_volume(0);
-  audio.connecttohost(host.c_str());
+    host.trim();
+    hostStream = host.c_str();
+    hostName   = name.c_str();
+    Serial.println("#510 ++++++++++++++++");
+    Serial.println(hostName);
+    Serial.println(hostStream);
+    //snprintf(extraHost, 64, hostStream);
+    //Serial.println(extraHost);
+    
+    //snprintf(extraInfo, 32, name.c_str());
+    //radioBuffer2 = name;
+        audio.setVolume(0);
+        audio.stopSong();
+        es_volume(0); 
+
+  //audio.connecttohost(extraHost);
+  audio.connecttohost(hostStream);
+  
 }
 
 int getlastStation(){

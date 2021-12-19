@@ -13,7 +13,7 @@ void zapiszSPIFFS(const char *name, const char *content){
     }
     file.close();
 }
-
+/*
 String odczytajSPIFFS(const char *name){
     File file = SPIFFS.open(name, FILE_READ);
     String content = file.readStringUntil('\n');
@@ -22,7 +22,7 @@ String odczytajSPIFFS(const char *name){
     file.close();
     return content;
 }
-
+*/
 
 String odczytajSPIFFScsv(const char *name) {
   File file = SPIFFS.open(name, FILE_READ);
@@ -44,7 +44,7 @@ void transCSV2Array(String (& arr) [numParams], String csv){
 */
 
 
-
+/*
 void listFileFromSPIFFS(){
     unsigned int totalBytes = SPIFFS.totalBytes();
     unsigned int usedBytes = SPIFFS.usedBytes();
@@ -60,7 +60,7 @@ void listFileFromSPIFFS(){
       file = root.openNextFile();
   }
 }
-
+*/
 
 /*
 String getValue(String data, char separator, int index)

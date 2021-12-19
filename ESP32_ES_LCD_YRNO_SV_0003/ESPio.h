@@ -40,6 +40,7 @@ class ESPio
       {2, "Jazz",      "http://stream.srg-ssr.ch/m/rsj/aacp_96"},
       {2, "Classic",   "http://stream.srg-ssr.ch/m/rsc_de/aacp_96"}
     }; 
+    
     String splitValue(String data, char separator, int index);
     String payload2LCD(String payload);
     String linieLCD[ARRAYSIZE] = { };

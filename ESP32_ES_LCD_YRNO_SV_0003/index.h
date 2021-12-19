@@ -113,7 +113,17 @@ div.gr button:first-child{background:darkcyan;}
 }  
 input.inp1, input.inp2 {font-size:0.9em;}  
 input.inp1 {width:24vw;}  
-input.inp2 {width:80vw;}  
+input.inp2 {width:72vw;}  
+button.btn-swap{
+    clear: both;
+    min-width: auto;
+    margin-right: 1vw;
+    font-size: 2em;
+    line-height: 1.5em;
+    padding: 0 4px;
+
+    margin-top: 0;
+}
 </style>
 <script>
 const _$=e=>document.querySelector(e);
@@ -397,13 +407,42 @@ const usun=(jj)=>{
       opiszLocaleModal();
   }
 }
+let swap=(nx)=>{
+    let n = parseInt(nx);
+    if (spawDirection==="up"){
+        if (n<1) {changeSwapDirection(); return;}
+        let t=stacjeARR[n-1];
+        stacjeARR[n-1] = stacjeARR[n];
+        stacjeARR[n] = t;
+    } else {
+       if (n>=stacjeARR.length-1) {changeSwapDirection(); return;}
+        let t=stacjeARR[n];
+        stacjeARR[n] = stacjeARR[n+1];
+        stacjeARR[n+1] = t;  
+    }
+    opiszLocaleModal();
+}
+
+let spawDirection = "up";
+  
+const changeSwapDirection=()=>{
+  if (spawDirection==="up") spawDirection = "dw"; else spawDirection = "up";
+  opiszLocaleModal();
+}
+//  &#x21C5    //  &#x219F;    //  &#x21A1    //  &uarr;    
 const opiszLocaleModal=()=>{
   let html="<h4>Radio streams:</h4>\n";
+  html += '<div><button class="smal" onClick="changeSwapDirection()";>&#x21C5</button></div>';
   stacjeARR.forEach((s,j)=>{
-      let [k,v] = s.split(";");
-      let i = j+1;
+    if (s){
+        let [k,v] = s.split(";");
+        let i = j+1;
+        let arrow = "&#x219F;";
+        if (spawDirection==="dw") arrow = "&#x21A1;";
+        let sortBtn='<button title="Sort" class="smal left btn-swap" onClick="swap(\''+j+'\')">'+arrow+'</button> ';
         let closeBtn='<button title="Usuń" class="smal right" onClick="usun(\''+j+'\')">'+i+'</button> ';
-        html += '<div><input class="inp1" value="'+k+'" />'+closeBtn+' <input class="inp2" value="'+v+'" /></div>'+"\n";
+        html += '<div class="inn">'+sortBtn+'<input class="inp1" value="'+k+'" />'+closeBtn+' <input class="inp2" value="'+v+'" /></div>'+"\n";
+    }
   });
   _$("#modalRadia").innerHTML = html;
 }
@@ -415,8 +454,7 @@ const DodajStream=()=>{
 }
 
 const ZapiszStream=()=>{
-  console.log("ZapiszStream");
-  let modalRadia = _$$("#modalRadia div");
+  let modalRadia = _$$("#modalRadia div.inn");
   let arr = [];
   modalRadia.forEach((m)=>{
     let inputy = m.querySelectorAll("input");
@@ -426,7 +464,6 @@ const ZapiszStream=()=>{
           arr.push(k+";"+v);
       }
   });
-  //console.log(arr);
   let zapis = arr.join("\n");
   console.log(zapis);
   sn("radio?z="+encodeURIComponent(zapis));
